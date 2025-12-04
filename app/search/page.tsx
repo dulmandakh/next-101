@@ -1,5 +1,6 @@
 "use client";
-import { useState, useTransition, useEffect } from "react";
+import Link from "next/link";
+import { useEffect, useState, useTransition } from "react";
 
 export default function SearchPage() {
   const [query, setQuery] = useState("");
@@ -55,14 +56,14 @@ export default function SearchPage() {
       {data && data.Search && (
         <div className="mt-6 grid gap-4">
           {data.Search.map((item: any) => (
-            <div
-              //   key={1}
+            <Link
+              href={`/movie/${item.imdbID}`}
               key={item.imdbID}
               className="border border-gray-200 rounded p-4"
             >
               <h2 className="text-xl font-semibold">{item.Title}</h2>
               <p className="text-gray-600">{item.Year}</p>
-            </div>
+            </Link>
           ))}
         </div>
       )}
