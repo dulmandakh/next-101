@@ -1,26 +1,28 @@
 "use client";
-import { use, useEffect, useState, useTransition } from "react";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { Suspense, use } from "react";
 
-export default function Page({ params }: { params: Promise<{ id: string }> }) {
+export default function Wrapper({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = use(params);
-  const [movie, setMovie] = useState<any>(null);
-  const [isPending, startTransition] = useTransition();
-
-  useEffect(() => {
-    startTransition(async () => {
-      await fetch(`http://www.omdbapi.com/?apikey=8018e581&i=${id}`)
-        .then((res) => res.json())
-        .then((data) => setMovie(data));
-    });
-  }, []);
-
-  console.log(movie);
-
-  return isPending ? (
-    <div>Loading...</div>
-  ) : (
-    <>
-      <div>My Movie id: {movie?.Title}</div>
-    </>
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Page id={id} />
+    </Suspense>
   );
+}
+
+function Page({ id }: { id: string }) {
+  const { data } = useSuspenseQuery({
+    queryKey: ["movie", id],
+    queryFn: () =>
+      fetch(`http://www.omdbapi.com/?apikey=8018e581&i=${id}`).then((res) =>
+        res.json()
+      ),
+  });
+
+  return <div>My Movie id: {data?.Title}</div>;
 }
