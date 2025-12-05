@@ -1,4 +1,6 @@
 "use client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useState } from "react";
@@ -19,7 +21,7 @@ export default function SearchPage() {
     <div className="p-4">
       <h1 className="text-2xl font-bold">Movie search</h1>
       <div className="flex gap-2 max-w-md">
-        <input
+        <Input
           type="text"
           value={query}
           onChange={(e) => {
@@ -35,6 +37,14 @@ export default function SearchPage() {
           <p className="text-gray-600">Loading...</p>
         </div>
       )}
+      <div className="flex bg-black gap-4">
+        <Button variant="destructive" className="text-left">
+          Search
+        </Button>
+        <Button variant="destructive">Search</Button>
+        <Button variant="destructive">Search</Button>
+        <Button variant="destructive">Search</Button>
+      </div>
       {data && data.Search && (
         <div className="mt-6 grid gap-4">
           {data.Search.map((item: any) => (
