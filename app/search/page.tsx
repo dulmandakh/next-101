@@ -6,12 +6,13 @@ import { useState } from "react";
 export default function SearchPage() {
   const [query, setQuery] = useState("");
   const { data, isLoading } = useQuery({
-    queryKey: ["search", query],
-    queryFn: () =>
-      fetch(`http://www.omdbapi.com/?apikey=8018e581&s=${query}`).then((res) =>
-        res.json()
-      ),
-    enabled: query.length > 2,
+    queryKey: ["movies", query],
+    queryFn: async () => {
+      const res = await fetch(`/api/movie?query=${query}`);
+      if (!res.ok) throw new Error("Failed to fetch movies");
+      return res.json();
+    },
+    enabled: query.length > 0,
   });
 
   return (
